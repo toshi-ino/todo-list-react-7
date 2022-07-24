@@ -3,17 +3,21 @@ import "./App.css";
 import { useState } from "react";
 
 function App() {
+  const [todos, setTodos] = useState([]);
   const [text, setText] = useState("");
-  const [lists, setLists] = useState([]);
 
-  const handleTextChange = (e) => {
+  const handleTodoChange = (e) => {
     setText(e.target.value);
   };
 
   const handleAddClick = () => {
-    setLists([...lists, text]);
-    console.log([...lists, text]);
+    setTodos([...todos, text]);
+
     setText("");
+  };
+
+  const handleDeleteClick = () => {
+    console.log("click");
   };
 
   return (
@@ -26,14 +30,19 @@ function App() {
           type="text"
           className=""
           value={text}
-          onChange={handleTextChange}
+          onChange={handleTodoChange}
         />
         <button onClick={handleAddClick}>Add</button>
         <div className="App-content">
           <ul>
-            {lists.map((list, id) => {
+            {todos.map((todo, id) => {
               console.log(id);
-              return <li key={id}>{list}</li>;
+              return (
+                <li key={id}>
+                  {todo}
+                  <button onClick={handleDeleteClick}>Delete</button>
+                </li>
+              );
             })}
           </ul>
         </div>
