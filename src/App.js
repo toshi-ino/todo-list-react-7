@@ -5,6 +5,7 @@ import { useState } from "react";
 function App() {
   const [todos, setTodos] = useState([]);
   const [text, setText] = useState("");
+  const [detail, setDetail] = useState("");
 
   const handleTodoChange = (e) => {
     setText(e.target.value);
@@ -16,11 +17,17 @@ function App() {
     const newTodo = {
       text: text,
       id: new Date().getTime(),
+      detail: detail,
     };
 
     setTodos([...todos, newTodo]);
 
     setText("");
+    setDetail("");
+  };
+
+  const handleDetailChange = (e) => {
+    setDetail(e.target.value);
   };
 
   const handleDeleteClick = (id) => {
@@ -47,6 +54,10 @@ function App() {
           value={text}
           onChange={handleTodoChange}
         />
+        <h2>Details</h2>
+        <textarea value={detail} onChange={handleDetailChange}>
+          {detail}
+        </textarea>
         <button onClick={handleAddClick}>Add</button>
         <div className="App-content">
           <ul>
@@ -54,6 +65,8 @@ function App() {
               return (
                 <li key={todo.id}>
                   {todo.text}
+                  {todo.detail}
+                  {console.log(todo)}
                   <button onClick={() => handleDeleteClick(todo.id)}>
                     Delete
                   </button>
