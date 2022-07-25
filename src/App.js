@@ -11,13 +11,28 @@ function App() {
   };
 
   const handleAddClick = () => {
-    setTodos([...todos, text]);
+    if (!text) return;
+
+    const newTodo = {
+      text: text,
+      id: new Date().getTime(),
+    };
+
+    setTodos([...todos, newTodo]);
 
     setText("");
   };
 
-  const handleDeleteClick = () => {
-    console.log("click");
+  const handleDeleteClick = (id) => {
+    const deepCopy = todos.map((todo) => ({ ...todo }));
+    // const newTodos = deepCopy.filter((todo) => {//?
+    //   return todo.id !== id;
+    // });
+    const newTodos = todos.filter((todo) => {
+      return todo.id !== id; //? Where are they?
+    });
+    setTodos(newTodos);
+    console.log(newTodos);
   };
 
   return (
@@ -35,12 +50,13 @@ function App() {
         <button onClick={handleAddClick}>Add</button>
         <div className="App-content">
           <ul>
-            {todos.map((todo, id) => {
-              console.log(id);
+            {todos.map((todo) => {
               return (
-                <li key={id}>
-                  {todo}
-                  <button onClick={handleDeleteClick}>Delete</button>
+                <li key={todo.id}>
+                  {todo.text}
+                  <button onClick={() => handleDeleteClick(todo.id)}>
+                    Delete
+                  </button>
                 </li>
               );
             })}
