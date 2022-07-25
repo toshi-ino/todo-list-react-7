@@ -6,6 +6,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [text, setText] = useState("");
   const [detail, setDetail] = useState("");
+  const [status, setStatus] = useState("Not Started");
 
   const handleTodoChange = (e) => {
     setText(e.target.value);
@@ -18,6 +19,7 @@ function App() {
       text: text,
       id: new Date().getTime(),
       detail: detail,
+      status: status,
     };
 
     setTodos([...todos, newTodo]);
@@ -54,10 +56,12 @@ function App() {
           value={text}
           onChange={handleTodoChange}
         />
+
         <h2>Details</h2>
         <textarea value={detail} onChange={handleDetailChange}>
           {detail}
         </textarea>
+
         <button onClick={handleAddClick}>Add</button>
         <div className="App-content">
           <ul>
@@ -66,7 +70,19 @@ function App() {
                 <li key={todo.id}>
                   {todo.text}
                   {todo.detail}
-                  {console.log(todo)}
+
+                  <select
+                    onChange={(e) => {
+                      setStatus(e.target.value);
+                      console.log(e.target.value);
+                    }}
+                  >
+                    <option value="notStarted">Not Started</option>
+                    <option value="inProgress">In Progress</option>
+                    <option value="done">Done</option>
+                  </select>
+
+                  {/* {console.log(e.target.valuedo)} */}
                   <button onClick={() => handleDeleteClick(todo.id)}>
                     Delete
                   </button>
