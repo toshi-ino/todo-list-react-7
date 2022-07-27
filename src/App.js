@@ -1,14 +1,14 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [text, setText] = useState("");
   const [detail, setDetail] = useState("");
-  const [status, setStatus] = useState("Not Started");
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentTodo, setCurrentTodo] = useState({});
+  const [status, setStatus] = useState("notStarted");
+  const [filter, setFilter] = useState("all");
+  const [filteredTodos, setFilteredTodos] = useState([]);
 
   const handleTodoChange = (e) => {
     setText(e.target.value);
@@ -21,7 +21,7 @@ function App() {
       text: text,
       id: new Date().getTime(),
       detail: detail,
-      status: status,
+      status: "notStarted",
     };
 
     setTodos([...todos, newTodo]);
@@ -68,68 +68,106 @@ function App() {
     setTodos(newTodos);
   };
 
+  useEffect(() => {
+    const filteringTodos = () => {
+      switch (filter) {
+        case "notStarted":
+          setFilteredTodos(
+            todos.filter((todo) => todo.status === "notStarted")
+          );
+          break;
+
+        case "inProgress":
+          setFilteredTodos(
+            todos.filter((todo) => todo.status === "inProgress")
+          );
+          break;
+
+        case "done":
+          setFilteredTodos(todos.filter((todo) => todo.status === "done"));
+          break;
+
+        default:
+          setFilteredTodos(todos);
+      }
+      console.log("filter=", filter);
+    };
+    filteringTodos();
+  }, [filter, todos]); //?
+
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Todo</h1>
+      <h1>Todo</h1>
 
-        <div className="App-content">
-          <h2>Title</h2>
-          <input
-            type="text"
-            className=""
-            value={text}
-            onChange={handleTodoChange}
-          />
+      <div className="App-content">
+        <h2>Title</h2>
+        <input
+          type="text"
+          className=""
+          value={text}
+          onChange={handleTodoChange}
+        />
 
-          <h2>Details</h2>
-          <textarea value={detail} onChange={handleDetailChange}>
-            {detail}
-          </textarea>
+        <h2>Details</h2>
+        <textarea value={detail} onChange={handleDetailChange}>
+          {detail}
+        </textarea>
 
-          <button onClick={handleAddClick}>Add</button>
+        <button onClick={handleAddClick}>Add</button>
 
-          <ul>
-            {todos.map((todo) => {
-              return (
-                <li key={todo.id}>
-                  <input
-                    type="text"
-                    value={todo.text}
-                    onChange={(e) => {
-                      handleEditTextChange(todo.id, e.target.value);
-                    }}
-                  />
+        <select
+          value={filter}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            console.log("e=", e.target.value);
+          }}
+        >
+          <option value="all">All</option>
+          <option value="notStarted">Not Started</option>
+          <option value="inProgress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
 
-                  <textarea
-                    value={todo.detail}
-                    onChange={(e) => {
-                      handleEditDetailChange(todo.id, e.target.value);
-                    }}
-                  />
+        <ul>
+          {filteredTodos.map((todo) => {
+            return (
+              <li key={todo.id}>
+                <input
+                  type="text"
+                  value={todo.text}
+                  onChange={(e) => {
+                    handleEditTextChange(todo.id, e.target.value);
+                  }}
+                />
 
-                  <select
-                    onChange={(e) => {
-                      setStatus(e.target.value);
-                      console.log(e.target.value);
-                    }}
-                  >
-                    <option value="notStarted">Not Started</option>
-                    <option value="inProgress">In Progress</option>
-                    <option value="done">Done</option>
-                  </select>
+                <textarea
+                  value={todo.detail}
+                  onChange={(e) => {
+                    handleEditDetailChange(todo.id, e.target.value);
+                  }}
+                />
 
-                  {/* {console.log(e.target.valuedo)} */}
+                <select
+                  onChange={(e) => {
+                    setStatus(e.target.value);
+                    {
+                      console.log("todo.status=", todo.status);
+                    }
+                  }}
+                >
+                  <option value="notStarted">Not Started</option>
+                  <option value="inProgress">In Progress</option>
+                  <option value="done">Done</option>
+                </select>
 
-                  <button onClick={() => handleDeleteClick(todo.id)}>
-                    Delete
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </header>
+                <button onClick={() => handleDeleteClick(todo.id)}>
+                  Delete
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }
