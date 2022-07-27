@@ -46,35 +46,26 @@ function App() {
     console.log(newTodos);
   };
 
-  const handleEditClick = (todo) => {
-    setIsEditing(true);
-    // setTodos(newTodos);
-
-    // console.log(newTodos);
-    // setCurrentTodo({ ...todo });
-    setCurrentTodo({ ...todo });
-  };
-
-  const handleUpdateTodo = (id, updatedTodo) => {
-    const updatedItem = todos.map((todo) => {
-      return todo.id !== id ? updatedTodo : todo;
+  const handleEditTextChange = (id, text) => {
+    const deepCopy = todos.map((todo) => ({ ...todo }));
+    const newTodos = deepCopy.map((todo) => {
+      if (todo.id === id) {
+        todo.text = text;
+      }
+      return todo;
     });
-    setIsEditing(false);
-    setTodos(updatedItem);
+    setTodos(newTodos);
   };
 
-  const handleEditText = (e) => {
-    // const newTodos = todos.map((todo) => {
-    //   if (todo.id === id) {
-    //     todo.text = text;
-    // console.log(text);
-    // console.log(setText(e.target.value));
-    // }
-    // return todo;
-    // });
-    // setTodos(newTodos);
-    // console.log(currentTodo);
-    handleUpdateTodo(currentTodo.id, currentTodo);
+  const handleEditDetailChange = (id, detail) => {
+    const deepCopy = todos.map((todo) => ({ ...todo }));
+    const newTodos = deepCopy.map((todo) => {
+      if (todo.id === id) {
+        todo.detail = detail;
+      }
+      return todo;
+    });
+    setTodos(newTodos);
   };
 
   return (
@@ -83,56 +74,39 @@ function App() {
         <h1>Todo</h1>
 
         <div className="App-content">
-          {isEditing ? (
-            <>
-              <h2>Title</h2>
-              <input
-                type="text"
-                value={currentTodo.text}
-                onChange={handleEditText}
-              />
-              <h2>Details</h2>
+          <h2>Title</h2>
+          <input
+            type="text"
+            className=""
+            value={text}
+            onChange={handleTodoChange}
+          />
 
-              <select
-                onChange={(e) => {
-                  setStatus(e.target.value);
-                  console.log(e.target.value);
-                }}
-              >
-                <option value="notStarted">Not Started</option>
-                <option value="inProgress">In Progress</option>
-                <option value="done">Done</option>
-              </select>
+          <h2>Details</h2>
+          <textarea value={detail} onChange={handleDetailChange}>
+            {detail}
+          </textarea>
 
-              <button onClick={handleUpdateTodo}>Update</button>
-
-              <button onClick={handleDeleteClick}>Cancel</button>
-            </>
-          ) : (
-            <>
-              <h2>Title</h2>
-              <input
-                type="text"
-                className=""
-                value={text}
-                onChange={handleTodoChange}
-              />
-
-              <h2>Details</h2>
-              <textarea value={detail} onChange={handleDetailChange}>
-                {detail}
-              </textarea>
-
-              <button onClick={handleAddClick}>Add</button>
-            </>
-          )}
+          <button onClick={handleAddClick}>Add</button>
 
           <ul>
             {todos.map((todo) => {
               return (
                 <li key={todo.id}>
-                  {todo.text}
-                  {todo.detail}
+                  <input
+                    type="text"
+                    value={todo.text}
+                    onChange={(e) => {
+                      handleEditTextChange(todo.id, e.target.value);
+                    }}
+                  />
+
+                  <textarea
+                    value={todo.detail}
+                    onChange={(e) => {
+                      handleEditDetailChange(todo.id, e.target.value);
+                    }}
+                  />
 
                   <select
                     onChange={(e) => {
@@ -146,8 +120,6 @@ function App() {
                   </select>
 
                   {/* {console.log(e.target.valuedo)} */}
-
-                  <button onClick={() => handleEditClick(todo)}>Edit</button>
 
                   <button onClick={() => handleDeleteClick(todo.id)}>
                     Delete
