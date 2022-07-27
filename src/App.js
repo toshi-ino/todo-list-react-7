@@ -34,6 +34,20 @@ function App() {
     setDetail(e.target.value);
   };
 
+  const handleStatusChange = (id, status) => {
+    const deepCopy = todos.map((todo) => ({ ...todo }));
+    const newTodos = deepCopy.map((todo) => {
+      if (todo.id === id) {
+        todo.status = status;
+        console.log("status=", status);
+        console.log("todo.status=", todo.status);
+      }
+      return todo;
+    });
+    setTodos(newTodos);
+    console.log(newTodos);
+  };
+
   const handleDeleteClick = (id) => {
     // const deepCopy = todos.map((todo) => ({ ...todo }));
     // const newTodos = deepCopy.filter((todo) => {//?
@@ -43,7 +57,6 @@ function App() {
       return todo.id !== id; //? Where are they?
     });
     setTodos(newTodos);
-    console.log(newTodos);
   };
 
   const handleEditTextChange = (id, text) => {
@@ -90,7 +103,6 @@ function App() {
         default:
           setFilteredTodos(todos);
       }
-      console.log("filter=", filter);
     };
     filteringTodos();
   }, [filter, todos]); //?
@@ -119,7 +131,6 @@ function App() {
           value={filter}
           onChange={(e) => {
             setFilter(e.target.value);
-            console.log("e=", e.target.value);
           }}
         >
           <option value="all">All</option>
@@ -148,11 +159,9 @@ function App() {
                 />
 
                 <select
+                  value={todo.status} //!
                   onChange={(e) => {
-                    setStatus(e.target.value);
-                    {
-                      console.log("todo.status=", todo.status);
-                    }
+                    handleStatusChange(todo.id, e.target.value);
                   }}
                 >
                   <option value="notStarted">Not Started</option>
