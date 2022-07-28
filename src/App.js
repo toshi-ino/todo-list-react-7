@@ -1,6 +1,16 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
+import { AddCircle } from "@mui/icons-material";
+import {
+  Box,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -108,36 +118,83 @@ function App() {
   }, [filter, todos]); //?
 
   return (
-    <div className="App">
-      <h1>Todo</h1>
+    <Container
+      maxWidth="xs"
+      sx={{
+        background: "#fff",
+        width: "calc(100% - 40px)",
+        minHeight: "400px",
+        margin: "20px auto 0",
+        padding: "40px 20px",
+        boxShadow: "5px 5px 20px #999",
+        borderRadius: "10px",
+      }}
+    >
+      <Typography
+        variant="h1"
+        fontSize="32px"
+        fontWeight="bold"
+        textAlign="center"
+        sx={{ mb: "24px" }}
+      >
+        All Tasks
+      </Typography>
 
-      <div className="App-content">
-        <h2>Title</h2>
-        <input
+      <Box>
+        <Typography variant="h2" fontSize="20px" fontWeight="bold" mb="8px">
+          Title
+        </Typography>
+        <TextField
+          id="filled-basic"
+          label="Task Title"
+          variant="filled"
           type="text"
-          className=""
           value={text}
+          sx={{ mb: "24px", width: "100%" }}
           onChange={handleTodoChange}
         />
 
-        <h2>Details</h2>
-        <textarea value={detail} onChange={handleDetailChange}>
-          {detail}
-        </textarea>
-
-        <button onClick={handleAddClick}>Add</button>
-
-        <select
-          value={filter}
-          onChange={(e) => {
-            setFilter(e.target.value);
-          }}
+        <Typography variant="h2" fontSize="20px" fontWeight="bold" mb="8px">
+          Details
+        </Typography>
+        <TextField
+          id="filled-basic"
+          label="Task Detail"
+          variant="filled"
+          value={detail}
+          sx={{ mb: "24px", width: "100%" }}
+          onChange={handleDetailChange}
         >
-          <option value="all">All</option>
-          <option value="notStarted">Not Started</option>
-          <option value="inProgress">In Progress</option>
-          <option value="done">Done</option>
-        </select>
+          {detail}
+        </TextField>
+
+        <AddCircle
+          sx={{
+            color: "#2196f3",
+            fontSize: "48px",
+            cursor: "pointer",
+            display: "block",
+            m: "0 auto 24px",
+          }}
+          onClick={handleAddClick}
+        />
+
+        <FormControl variant="filled" sx={{ minWidth: 200 }}>
+          <InputLabel id="demo-simple-select-filled-label">Filter</InputLabel>
+          <Select
+            labelId="demo-simple-select-filled-label"
+            id="demo-simple-select-filled"
+            value={filter}
+            onChange={(e) => {
+              setFilter(e.target.value);
+            }}
+          >
+            <MenuItem value="all">All</MenuItem>
+            <MenuItem value="notStarted">Not Started</MenuItem>
+            <MenuItem value="inProgress">In Progress</MenuItem>
+            <MenuItem value="done">Done</MenuItem>
+          </Select>
+        </FormControl>
 
         <ul>
           {filteredTodos.map((todo) => {
@@ -176,8 +233,8 @@ function App() {
             );
           })}
         </ul>
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 }
 
