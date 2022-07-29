@@ -1,6 +1,7 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import { AddCircle } from "@mui/icons-material";
+import CancelIcon from "@mui/icons-material/Cancel";
 import {
   Box,
   Container,
@@ -124,7 +125,7 @@ function App() {
         background: "#fff",
         width: "calc(100% - 40px)",
         minHeight: "400px",
-        margin: "20px auto 0",
+        margin: "0 auto",
         padding: "40px 20px",
         boxShadow: "5px 5px 20px #999",
         borderRadius: "10px",
@@ -179,7 +180,7 @@ function App() {
           onClick={handleAddClick}
         />
 
-        <FormControl variant="filled" sx={{ minWidth: 200 }}>
+        <FormControl variant="filled" sx={{ minWidth: 200, mb: "24px" }}>
           <InputLabel id="demo-simple-select-filled-label">Filter</InputLabel>
           <Select
             labelId="demo-simple-select-filled-label"
@@ -200,35 +201,51 @@ function App() {
           {filteredTodos.map((todo) => {
             return (
               <li key={todo.id}>
-                <input
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
                   type="text"
                   value={todo.text}
+                  sx={{ mr: 1, width: "45%" }}
                   onChange={(e) => {
                     handleEditTextChange(todo.id, e.target.value);
                   }}
                 />
 
-                <textarea
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
                   value={todo.detail}
+                  sx={{ width: "45%" }}
                   onChange={(e) => {
                     handleEditDetailChange(todo.id, e.target.value);
                   }}
                 />
 
-                <select
-                  value={todo.status} //!
-                  onChange={(e) => {
-                    handleStatusChange(todo.id, e.target.value);
-                  }}
-                >
-                  <option value="notStarted">Not Started</option>
-                  <option value="inProgress">In Progress</option>
-                  <option value="done">Done</option>
-                </select>
+                <FormControl sx={{ mt: "8px" }}>
+                  <Select
+                    value={todo.status} //!
+                    onChange={(e) => {
+                      handleStatusChange(todo.id, e.target.value);
+                    }}
+                  >
+                    <MenuItem value="notStarted">Not Started</MenuItem>
+                    <MenuItem value="inProgress">In Progress</MenuItem>
+                    <MenuItem value="done">Done</MenuItem>
+                  </Select>
+                </FormControl>
 
-                <button onClick={() => handleDeleteClick(todo.id)}>
+                <CancelIcon
+                  sx={{
+                    color: "#f44336",
+                    fontSize: "48px",
+                    cursor: "pointer",
+                    display: "block",
+                  }}
+                  onClick={() => handleDeleteClick(todo.id)}
+                >
                   Delete
-                </button>
+                </CancelIcon>
               </li>
             );
           })}
