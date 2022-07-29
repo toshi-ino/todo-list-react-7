@@ -118,6 +118,16 @@ function App() {
     filteringTodos();
   }, [filter, todos]); //?
 
+  const today = new Date();
+  const date = today.getDate();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+  const hours = today.getHours();
+  const minutes = today.getMinutes().toString().padStart(2, "0");
+  const currentTime = `${date}-${month}-${year} ${hours}:${minutes}`;
+
+  console.log(hours);
+
   return (
     <Container
       maxWidth="xs"
@@ -234,6 +244,8 @@ function App() {
                     <MenuItem value="done">Done</MenuItem>
                   </Select>
                 </FormControl>
+
+                <Box sx={{ mt: "8px" }}>{currentTime}</Box>
 
                 <CancelIcon
                   sx={{
